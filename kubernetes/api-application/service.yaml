@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: guts-demo-service
+spec:
+  type: NodePort
+  # type: LoadBalancer
+  ports:
+    - port: 5000
+      targetPort: port5000
+      protocol: TCP
+  selector:
+    app: guts-api-demo

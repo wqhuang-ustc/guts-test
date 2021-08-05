@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guts-demo
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: guts-api-demo
+  template:
+    metadata:
+      labels:
+        app: guts-api-demo
+    spec:
+      containers:
+        - name: api-application
+          image: weiqinghuang/guts_api_demo:latest
+          ports:
+            - containerPort: 5000
+              name: port5000
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "250m"
+            limits:
+              memory: "200Mi"
+              cpu: "500m"
