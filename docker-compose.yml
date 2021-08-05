@@ -5,6 +5,12 @@ services:
     image: weiqinghuang/guts_api_demo:latest
     deploy:
       replicas: 1
+      endpoint_mode: vip
+      mode: replicated
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
       restart_policy:
         condition: on-failure
     container_name: backend-api
