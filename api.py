@@ -73,7 +73,7 @@ def protected():
     return '%s' % current_identity
 
 @app.route('/api/v1/sales/all')
-# @jwt_required()
+@jwt_required()
 def api_all():
     bson_sales = db.sales.find_one()
     # convert the record to json
