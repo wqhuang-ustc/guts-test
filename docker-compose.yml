@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  backend-svc:
+    image: kylinhuang/guts_api_demo:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    container_name: backend-api
+    ports:
+      - 5000:5000

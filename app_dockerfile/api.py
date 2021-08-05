@@ -34,7 +34,7 @@ def identity(payload):
     return userid_table.get(user_id, None)
 
 app = Flask(__name__)
-app.debug = True
+# app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
 app.config["MONGO_URI"] = "mongodb://ec2-13-53-186-244.eu-north-1.compute.amazonaws.com:27017/mydb"
 
@@ -87,4 +87,4 @@ def api_all():
     return Response(sales_all, mimetype='application/json')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")
