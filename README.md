@@ -304,4 +304,11 @@ Host: 172.18.8.101:32231
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNjI4MTk2NTEwLCJuYmYiOjE2MjgxOTY1MTAsImV4cCI6MTYyODE5NjgxMH0.d7cAtlWQ11Mxi3jD0DmlADmq22JpvPnCqJCIquzZaVk
 Content-Type: application/json
 ```
-## Monitoring and Log collecting
+## Monitoring via Prometheus
+To monitoring the status of resource in the Kubernetes cluster, kube-state-metrics and Prometheus will be deployed into the cluster to collect metrics about the state of the objects in the cluster.
+```
+kubectl apply -f kubernetes/prometheus/kube-state-metrics/
+kubectl apply -f kubernetes/prometheus
+```
+
+Now we can check the metrics of the cluster via `http://172.18.8.101:30052/new/targets`.
