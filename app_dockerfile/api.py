@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from flask_pymongo import PyMongo
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
@@ -43,6 +43,10 @@ db = mongodb_client.db
 
 jwt = JWT(app, authenticate, identity)
 
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
+
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>Demo for GUTS test</h1><p>This site is a prototype API for showing sales data</p>"
@@ -63,12 +67,18 @@ def api_all():
     return Response(sales_all, mimetype='application/json')
 
 @app.route('/api/v1/sales/purchasemethod/<how>')
+@jwt_required()
 def purchase_how(how):
     data = []
     record_all = db.sales.find({'purchaseMethod': how})
+    print(record_all)
+
     for record in record_all:
         json_record = dumps(record)
         data.append(json_record)
+    
+    if not data:
+        abort(404, description="Resource not found")
     return Response(data, mimetype='application/json')
 
 if __name__ == '__main__':
