@@ -98,6 +98,7 @@ And you will get response like below:
         .....
 }
 ```
+Get filtered sales data by specify the purchasemethod(Online/Phone/In store) in the request URL: /api/v1/sales/purchasemethod/Phone .
 
 This API application can be further extended to perform complicated query to the Mongodb, for example, find all sales in storeLocation: London and calculate the total price. But since this is a project for a DevOps Engineer, I will not implement these possible features.
 
