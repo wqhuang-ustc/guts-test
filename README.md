@@ -2,7 +2,7 @@
 This is a repo for codes and deployment for the guts-test assignment.
 
 ## Introduction
-This task requires deploying two instances of an API application to handle the designed API requests. The API application should be trivially easy to deploy on either AWS, k8s, any linux VM. Thus, the API application will be packaged into a docker image and can be deployed anywhere with docker installed. In this project, I will demostrate how to deploy the application container in docker-compose and docker swarm, as well as Kubernetes. The monitoring and log collection tool will also be provided for this deployment.
+This task requires deploying two instances of an API application to handle the designed API requests. The API application should be trivially easy to deploy on either AWS, k8s, any linux VM. Thus, the API application will be packaged into a docker image and can be deployed anywhere with docker installed. In this project, I will demostrate how to deploy the application container in docker-compose and docker swarm, as well as Kubernetes. The monitoring(Prometheus+Grafana) and log collection tool(filebeat+ELK) will also be provided for this deployment.
 
 <img src="https://github.com/wqhuang-ustc/guts-test/blob/main/guts-demo-image.png" width="800">
 

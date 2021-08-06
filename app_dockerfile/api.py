@@ -34,9 +34,9 @@ def identity(payload):
     return userid_table.get(user_id, None)
 
 app = Flask(__name__)
-# app.debug = True
+app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
-app.config["MONGO_URI"] = "mongodb://ec2-13-53-186-244.eu-north-1.compute.amazonaws.com:27017/mydb"
+app.config["MONGO_URI"] = "mongodb://myUserAdmin:happyfriday@ec2-13-53-186-244.eu-north-1.compute.amazonaws.com:27017/mydb?authSource=admin"
 
 mongodb_client = PyMongo(app)
 db = mongodb_client.db
@@ -61,6 +61,15 @@ def api_all():
         json_sale = dumps(sale)
         sales_all.append(json_sale)
     return Response(sales_all, mimetype='application/json')
+
+@app.route('/api/v1/sales/purchasemethod/<how>')
+def purchase_how(how):
+    data = []
+    record_all = db.sales.find({'purchaseMethod': how})
+    for record in record_all:
+        json_record = dumps(record)
+        data.append(json_record)
+    return Response(data, mimetype='application/json')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
