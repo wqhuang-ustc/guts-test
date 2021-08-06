@@ -6,6 +6,7 @@ This task requires deploying two instances of an API application to handle the d
 
 <img src="https://github.com/wqhuang-ustc/guts-test/blob/main/guts-demo-image.png" width="800">
 
+
 ## Implementation of API application
 
 ### Database and the sample dataset
@@ -304,7 +305,7 @@ Host: 172.18.8.101:32231
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNjI4MTk2NTEwLCJuYmYiOjE2MjgxOTY1MTAsImV4cCI6MTYyODE5NjgxMH0.d7cAtlWQ11Mxi3jD0DmlADmq22JpvPnCqJCIquzZaVk
 Content-Type: application/json
 ```
-## Monitoring via Prometheus
+## Monitoring Kubernetes via Prometheus + Grafana
 To monitoring the status of resource in the Kubernetes cluster, kube-state-metrics and Prometheus will be deployed into the cluster to collect metrics about the state of the objects in the cluster.
 ```
 kubectl apply -f kubernetes/prometheus/kube-state-metrics/
@@ -312,3 +313,35 @@ kubectl apply -f kubernetes/prometheus
 ```
 
 Now we can check the metrics of the cluster via `http://172.18.8.101:30052/new/targets`.
+
+This Prometheus will scrape the metrics from kubernetes-apiservers, kubernetes nodes, kubernetes-pods, kube-state-metrics, kubernetes-cadvisor every 60s.
+
+To get a more user-friendly UI, a grafana is deployed into the k8s cluster.
+```
+kubectl apply -f kubernetes/grafana/grafana.yaml
+```
+Now the Grafana web page is available in `http://172.18.8.101:30195`, we can create dashboard to visualize the metrics from data source Prometheus.(Use `admin` for both the username and password to login)
+
+## Log aggregation via Filebeat + Elasticsearch + Kibana
+
+To deploy the whole ELK stack, run the commands below:
+```
+kubectl apply -f kubernetes/elk
+```
+Now, the logs of all containers running in the Kubernetes cluster is collected by filebeat and stored in elasticsearch, and can be visualized in the Kibana.
+Visit the Kibana web in http://172.18.8.101:32191/ and use credential below.
+
+A default user name `elastic` is automatically created with password stored in a Kubernetes secret:
+```
+PASSWORD=$(kubectl get secret elasticsearch-demo-es-elastic-user -o go-template='{{.data.elastic | base64decode}}')
+```
+
+## Reference
+- https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask
+- https://pythonhosted.org/Flask-JWT/
+- https://docs.docker.com/engine/swarm/
+- https://kubespray.io/#/
+- https://github.com/kubernetes/dashboard
+- https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-quickstart.html
+- https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html
+
