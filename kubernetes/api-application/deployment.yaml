@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: api-application
-          image: weiqinghuang/guts_api_demo:latest
+          image: weiqinghuang/guts_api_demo:0.1
           ports:
             - containerPort: 5000
               name: port5000

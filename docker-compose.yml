@@ -2,7 +2,7 @@ version: '3'
 
 services:
   backend-svc:
-    image: weiqinghuang/guts_api_demo:latest
+    image: weiqinghuang/guts_api_demo:0.1
     deploy:
       replicas: 1
       endpoint_mode: vip
