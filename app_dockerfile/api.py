@@ -36,7 +36,7 @@ def identity(payload):
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
-app.config["MONGO_URI"] = "mongodb://myUserAdmin:happyfriday@ec2-13-53-186-244.eu-north-1.compute.amazonaws.com:27017/mydb?authSource=admin"
+app.config["MONGO_URI"] = "mongodb://developer:midnightfix@ec2-13-53-186-244.eu-north-1.compute.amazonaws.com:27017/mydb?authSource=admin"
 
 mongodb_client = PyMongo(app)
 db = mongodb_client.db
