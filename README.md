@@ -26,7 +26,7 @@ mongosh
     use mydb;
     db.sales.find();
 ```
-Now, the Mongodb is ready to accept query from our API application.
+Now, the Mongodb is ready to accept query from our API application. Enable authentication and authorization to control the access to this MongoDB and the user's access to resources and operations. In this project, a user name "developer" with limited "readwrite" permission to mydb database is created and used to access the Mongodb from the application.
 
 ### API applicaiton
 
@@ -306,6 +306,52 @@ Host: 172.18.8.101:32231
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNjI4MTk2NTEwLCJuYmYiOjE2MjgxOTY1MTAsImV4cCI6MTYyODE5NjgxMH0.d7cAtlWQ11Mxi3jD0DmlADmq22JpvPnCqJCIquzZaVk
 Content-Type: application/json
 ```
+
+
+## Manage the application
+
+To deploy a new version of application into the k8s cluster, you need to first build a new version of docker image of the released code and update the image in the deployment of the Kubernetes cluster.
+```
+cd app_dockerfile
+docker build . -t weiqinghuang/guts_api_demo:0.1 ## Assuming that we are releasing version 0.1
+docker push weiqinghuang/guts_api_demo:0.1 ## push the image to your docker repository to make it available anythere
+```
+Then, use the new version of docker image in the deployment.yaml and apply to update the application.
+```
+    spec:
+      containers:
+        - name: api-application
+          image: weiqinghuang/guts_api_demo:0.1
+```
+```
+kubectl apply -f kubernetes/api-application/deployment.yaml ## It will do the rolling update of the application with zero down-time
+```
+If you want to delete the application and all related resources:
+```
+kubectl delete -f resource-to-de-deleted.yaml
+```
+
+Tips:
+If the image is pulling from a private docker repo, you need to create a secret and config the `imagePullSecrets` for accessing this private repo.
+```
+kubectl create secret -n application-namespace docker-registry regcred \
+    --docker-server=url-to-the-private-repo:port \
+    --docker-username=<LDAPUSERNAME> \
+    --docker-password=<LDAPPASSWORD> \
+    --docker-email=<YOUREMAIL>
+```
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guts-demo
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+      - name: regcred
+```
+
 ## Monitoring Kubernetes via Prometheus + Grafana
 To monitoring the status of resource in the Kubernetes cluster, kube-state-metrics and Prometheus will be deployed into the cluster to collect metrics about the state of the objects in the cluster.
 ```
