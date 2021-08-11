@@ -149,6 +149,13 @@ To delete the API application from the swarm, run below command:
 docker stack rm gutsdemo
 ```
 
+Troubleshooting in the Docker container environment.
+```
+docker ps -a ## Get container information.
+docker logs <container-id> ## Retrieve the logs for a container
+docker exec -it <container-id> /bin/bash ## Connect to a container and start a Bash session 
+```
+
 ## Launch Kubernetes cluster and deploy API application
 
 ### Kubernetes nodes provisioning
@@ -306,6 +313,18 @@ Host: 172.18.8.101:32231
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNjI4MTk2NTEwLCJuYmYiOjE2MjgxOTY1MTAsImV4cCI6MTYyODE5NjgxMH0.d7cAtlWQ11Mxi3jD0DmlADmq22JpvPnCqJCIquzZaVk
 Content-Type: application/json
 ```
+
+Troubleshooting the Kubernetes Cluster
+```
+kubectl cluster-info dump ## Get the detailed information about the overall health of the cluster
+kubectl get nodes ## Check if all nodes are in Ready status
+kubectl get all ## List all service, deployment, pods, replicas-set in current namespace
+kubectl describe resource-type resource-name ## Show details of a specific resource
+kubectl logs pod-name ## Print the logs for a container in a pod or specified resource.
+kubectl exec -it pod-name -- COMMAND ## Execute a command in a container
+```
+
+
 ## Monitoring Kubernetes via Prometheus + Grafana
 To monitoring the status of resource in the Kubernetes cluster, kube-state-metrics and Prometheus will be deployed into the cluster to collect metrics about the state of the objects in the cluster.
 ```
@@ -343,6 +362,8 @@ PASSWORD=$(kubectl get secret elasticsearch-demo-es-elastic-user -o go-template=
 - https://docs.docker.com/engine/swarm/
 - https://kubespray.io/#/
 - https://github.com/kubernetes/dashboard
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+- https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 - https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-quickstart.html
 - https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html
 
